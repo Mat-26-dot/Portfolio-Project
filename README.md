@@ -3,8 +3,6 @@
 
 *A mobile-first web app that helps users create recipes from leftover ingredients with gamification for content creators*
 
-[![Presentation Date](https://img.shields.io/badge/Demo-Nov%2017%202025-blue)](https://github.com)
-
 ## 🎯 Project Overview
 
 **The Problem**: People waste food because they don't know what to cook with their leftovers, and food content creators need engaging content ideas.
