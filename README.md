@@ -4,6 +4,7 @@
 *A mobile-first web app that helps users create recipes from leftover ingredients with gamification for content creators*
 
 
+
 ## 🎯 Project Overview
 
 **The Problem**: People waste food because they don't know what to cook with their leftovers, and food content creators need engaging content ideas.
