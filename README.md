@@ -416,6 +416,10 @@ Special thanks to everyone who helped make this project possible:
 
 ---
 
-*Built with ❤️ by [Your Team Name] | Fighting food waste one leftover at a time*
+*Built by Mathijs Dickson
+          Alex Atanasovski
+          Alex Perry
+          Isaac Dillon
+          
+Fighting food waste one leftover at a time*
 
-**⭐ Star this repo if you found it helpful!**
