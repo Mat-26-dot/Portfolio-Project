@@ -395,13 +395,11 @@ This project is licensed under the MIT License - see [LICENSE.md](LICENSE.md) fo
 
 ### **Team Contact**
 - **Project Repository**: [github.com/your-team/leftoverlab](https://github.com/your-team/leftoverlab)
-- **Demo Questions**: [your-email@university.edu](mailto:your-email@university.edu)
-- **Technical Issues**: Create an [Issue](https://github.com/your-team/leftoverlab/issues)
+
 
 ### **University Course**
-- **Course**: [Course Code & Name]
-- **Semester**: Fall 2025
-- **Instructor**: [Instructor Name]
+- **Course**: Holberton, Melbourne
+- **Semester**: Cohort 26
 
 ---
 
