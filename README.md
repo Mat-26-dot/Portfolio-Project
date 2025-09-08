@@ -415,9 +415,9 @@ Special thanks to everyone who helped make this project possible:
 ---
 
 *Built by Mathijs Dickson
-Alex Atanasovski
-Alex Perry
-Isaac Dillon
+- Alex Atanasovski
+- Alex Perry
+- Isaac Dillon
           
 Fighting food waste one leftover at a time*
 
