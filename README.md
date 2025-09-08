@@ -3,7 +3,6 @@
 
 *A mobile-first web app that helps users create recipes from leftover ingredients with gamification for content creators*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)](https://nodejs.org/)
 [![Presentation Date](https://img.shields.io/badge/Demo-Nov%2017%202025-blue)](https://github.com)
 
@@ -417,9 +416,9 @@ Special thanks to everyone who helped make this project possible:
 ---
 
 *Built by Mathijs Dickson
-          Alex Atanasovski
-          Alex Perry
-          Isaac Dillon
+Alex Atanasovski
+Alex Perry
+Isaac Dillon
           
 Fighting food waste one leftover at a time*
 
