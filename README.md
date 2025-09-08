@@ -414,7 +414,8 @@ Special thanks to everyone who helped make this project possible:
 
 ---
 
-*Built by Mathijs Dickson
+*Built by 
+- Mathijs Dickson
 - Alex Atanasovski
 - Alex Perry
 - Isaac Dillon
