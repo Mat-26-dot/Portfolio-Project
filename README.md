@@ -3,7 +3,6 @@
 
 *A mobile-first web app that helps users create recipes from leftover ingredients with gamification for content creators*
 
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)](https://nodejs.org/)
 [![Presentation Date](https://img.shields.io/badge/Demo-Nov%2017%202025-blue)](https://github.com)
 
 ## 🎯 Project Overview
