@@ -1,9 +1,10 @@
 # Portfolio-Project
+
 # 🍅 LeftoverLab - Turn Leftovers into Delicious Meals
 
 *A mobile-first web app that helps users create recipes from leftover ingredients with gamification for content creators*
 
-
+---
 
 ## 🎯 Project Overview
 
