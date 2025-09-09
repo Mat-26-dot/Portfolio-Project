@@ -95,8 +95,8 @@ MySQL >= 8.0
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/your-team/leftoverlab.git
-cd leftoverlab
+git clone https://github.com/Mat-26-dot/Portfolio-Project.git
+cd Portfolio-Project
 ```
 
 2. **Install dependencies**
