@@ -21,7 +21,6 @@ export const recipes = [
     ],
     cookTime: "12 mins",
     difficulty: "Easy",
-    chaosScore: 58,
-    estimatedSavings: 4.75
+    estimatedSavings: 4
   }
 ];
