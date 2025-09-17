@@ -141,9 +141,18 @@ DB_USER=your_username
 DB_PASS=your_password
 DB_NAME=leftoverlab
 
-# External APIs
-OPENFOOD_API_KEY=your_key_here
-ZAPIER_WEBHOOK_URL=your_webhook_url
+To make it presentation-reliable:
+Quick backup strategy:
+
+# Backup your data (run this occasionally)
+pg_dump -U postgres your_database > backup.sql
+
+# Restore if needed
+psql -U postgres your_database < backup.sql
+
+Or use a volume:
+bash# When running your container, add a volume
+docker run -v portfolio_db_data:/var/lib/postgresql/data your_container
 
 # Session
 SESSION_SECRET=your_secret_key
