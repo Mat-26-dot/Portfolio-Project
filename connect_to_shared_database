@@ -1,0 +1,36 @@
+ Install PostgreSQL Client (if not already installed)
+In your Docker container:
+bash# Update package list
+apt update
+
+# Install PostgreSQL client
+apt install -y postgresql-client
+
+Connect to Our Database
+bashpsql -h [MAT'S_IP_ADDRESS] -p 5432 -U postgres -d chaos_cooking
+
+Replace [MAT'S_IP_ADDRESS] with the actual IP I'll provide
+Step 4: Enter Password
+
+When prompted, enter: Password82
+You should see: chaos_cooking=#
+
+Test the Connection
+sql-- See all our users
+SELECT * FROM users;
+
+-- See available recipes  
+SELECT title, description FROM recipes;
+
+-- See leftover ingredients
+SELECT name, category FROM ingredients WHERE category LIKE 'leftover%';
+
+-- Exit when done
+\q
+Step 6: Use in Your Code
+Now you can write hard-coded queries in your application using:
+Connection: postgresql://postgres:Password82@[MAT'S_IP_ADDRESS]:5432/chaos_cooking
+
+* My machine has to be running for you to access the connection to the database*
+
+Let me know if you encounter issues!
