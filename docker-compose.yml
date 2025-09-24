@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  frontend:
+    build:
+      context: ./portfolio-site
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_TELEMETRY_DISABLED=1
+      # If hot reload is flaky on Windows/WSL/VMs, uncomment:
+      # - WATCHPACK_POLLING=true
+    volumes:
+      - ./portfolio-site:/app        # live code sync
+      - /app/node_modules            # keep container's node_modules
