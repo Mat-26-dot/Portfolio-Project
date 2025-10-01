@@ -1,70 +1,284 @@
-# Getting Started with Create React App
+# 🍳 Chaos Cooking
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**A food wastage reduction app that helps users transform leftover ingredients into delicious recipes.**
 
-## Available Scripts
+Chaos Cooking empowers users to reduce food waste by discovering creative recipes using ingredients they already have, before they go bad. Perfect for students, busy professionals, and content creators who want to save money, reduce waste, and gamify their cooking experience.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 📋 Table of Contents
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Database Schema](#-database-schema)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [API Endpoints](#-api-endpoints)
+- [Team](#-team)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ✨ Features
 
-### `npm test`
+### Core Functionality
+- **Recipe Discovery**: Browse community-uploaded recipes designed to use up leftover ingredients
+- **Smart Ingredient Matching**: Search recipes based on what you have in your fridge
+- **Upload Your Own Recipes**: Share your leftover-rescue recipes with the community
+- **Duplicate Prevention**: Smart validation ensures users don't accidentally upload the same recipe twice
+- **Recipe History Tracking**: Track which recipes you've viewed, cooked, favorited, or rated
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### User Personas
+Our app is designed for:
+- 👩‍🎨 **Content Creators** (like Chloe) - Create aesthetic cooking content while reducing waste
+- 💼 **Busy Professionals** (like Marcus) - Quick 15-minute meals using leftovers after long workdays  
+- 🎓 **Students** (like Emma) - Budget-friendly recipes that save money and reduce dorm food waste
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠 Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Frontend
+- HTML5, CSS3, JavaScript
+- Responsive design for mobile and desktop
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend
+- **Python Flask** - Lightweight web framework
+- **PostgreSQL** - Relational database for recipes, ingredients, and user data
+- **psycopg2** - PostgreSQL adapter for Python
+- **Flask-CORS** - Cross-Origin Resource Sharing support
 
-### `npm run eject`
+### Database
+- PostgreSQL 14+
+- Pre-populated with sample recipes and ingredients
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🗄 Database Schema
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Tables
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**users**
+- Stores user account information (username, email, password_hash, name)
+- Tracks account creation and updates
 
-## Learn More
+**ingredients**
+- Library of common leftover ingredients categorized by type
+- Includes nutritional information (calories per unit)
+- Categories: leftover_protein, leftover_vegetable, leftover_fruit, leftover_starch, pantry
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**recipes**
+- User-created recipes with instructions, prep/cook time, and difficulty
+- Each recipe linked to its creator via `created_by` foreign key
+- Includes metadata like servings, prep time, cook time
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**recipe_ingredients** (Junction Table)
+- Links recipes to their required ingredients
+- Stores quantity, unit, and optional notes for each ingredient
 
-### Code Splitting
+**recipe_history**
+- Tracks user interactions with recipes
+- Actions: 'viewed', 'cooked', 'favorited', 'rated'
+- Enables popularity tracking and personalized recommendations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Key Database Features
+- **User-Specific Duplicate Prevention**: Users cannot upload multiple recipes with the same title
+- **Shared Recipe Library**: Multiple users can save and interact with the same community recipes
+- **Cascade Deletion**: Removing a recipe automatically removes its ingredient associations
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 📁 Project Structure
 
-### Making a Progressive Web App
+```
+Chaos_cooking_backend/
+├── app.py                    # Main Flask application
+├── db.py                     # Database connection configuration
+├── .env                      # Environment variables (not in git)
+├── requirements.txt          # Python dependencies
+├── routes/
+│   ├── recipes.py           # Recipe-related endpoints
+│   └── ingredients.py       # Ingredient-related endpoints
+├── Recipes_with_sample_data.sql  # Database schema and sample data
+└── README.md                # This file
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 🚀 Getting Started
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Prerequisites
+- Python 3.8+
+- PostgreSQL 14+
+- pip (Python package manager)
 
-### Deployment
+### Installation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. **Clone the repository**
+```bash
+git clone <repository-url>
+cd Chaos_cooking_backend
+```
 
-### `npm run build` fails to minify
+2. **Set up Python virtual environment** (recommended)
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+3. **Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+4. **Set up PostgreSQL database**
+```bash
+# Create database
+createdb chaos_cooking
+
+# Run SQL script to create tables and insert sample data
+psql -d chaos_cooking -f Recipes_with_sample_data.sql
+```
+
+5. **Configure environment variables**
+
+Create a `.env` file in the root directory:
+```env
+DB_USER=your_postgres_username
+DB_HOST=localhost
+DB_NAME=chaos_cooking
+DB_PASSWORD=your_postgres_password
+DB_PORT=5432
+PORT=5000
+```
+
+6. **Run the application**
+```bash
+python app.py
+```
+
+The server will start on `http://localhost:5000`
+
+### Testing the API
+
+Visit these endpoints in your browser:
+- `http://localhost:5000/` - Health check
+- `http://localhost:5000/api/recipes` - Get all recipes
+- `http://localhost:5000/api/ingredients` - Get all ingredients
+
+---
+
+## 📡 API Endpoints
+
+### Recipes
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/recipes` | Get all recipes |
+| GET | `/api/recipes/<id>` | Get single recipe with ingredients |
+| POST | `/api/recipes` | Upload new recipe (with duplicate check) |
+
+### Ingredients
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/ingredients` | Get all ingredients |
+| GET | `/api/ingredients/category/<category>` | Get ingredients by category |
+| GET | `/api/ingredients/categories` | Get all available categories |
+
+### Recipe History
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/ingredients/recipe-history` | Record user action (viewed, cooked, favorited, rated) |
+| GET | `/api/ingredients/recipe-history/user/<user_id>` | Get user's recipe history |
+
+### Example API Request
+
+**Create a new recipe:**
+```bash
+POST /api/recipes
+Content-Type: application/json
+
+{
+  "title": "Leftover Pasta Bake",
+  "description": "Transform yesterday's pasta into cheesy goodness",
+  "instructions": "1. Preheat oven to 350°F...",
+  "prep_time": 10,
+  "cook_time": 20,
+  "servings": 4,
+  "difficulty_level": "easy",
+  "created_by": 1,
+  "ingredients": [
+    {"ingredient_id": 22, "quantity": 200, "unit": "gram"},
+    {"ingredient_id": 28, "quantity": 100, "unit": "gram"}
+  ]
+}
+```
+
+---
+
+## 🎯 Key Features Implementation
+
+### Upload Recipe with Duplicate Check (UML Flow)
+
+Our recipe upload follows a three-tier architecture:
+
+1. **Presentation Layer**: User submits recipe form
+2. **Business Logic Layer**: 
+   - Validates required fields
+   - Checks if user already has a recipe with the same title
+   - If duplicate exists → returns 409 error
+   - If valid → proceeds to save
+3. **Persistence Layer**: Saves recipe and ingredient associations to database
+
+This ensures users don't accidentally submit the same recipe multiple times while allowing different users to share recipes with the same name.
+
+---
+
+## 👥 Team
+
+### Backend Team
+- Developer 1: Recipe endpoints and business logic
+- Developer 2: Ingredient endpoints and recipe history tracking
+
+### Frontend Team
+- Developer 3: User interface and recipe display
+- Developer 4: Search functionality and user interactions
+
+---
+
+## 🔮 Future Enhancements
+
+- User authentication and authorization
+- Recipe rating and review system
+- Advanced search with multiple ingredient filters
+- Expiration date tracking for ingredients
+- Meal planning calendar
+- Nutritional information calculator
+- Social sharing features
+- Mobile app version
+
+---
+
+## 📝 License
+
+This project is part of an academic group project.
+
+---
+
+## 🤝 Contributing
+
+This is a student project. If you're part of the team:
+1. Create a feature branch
+2. Make your changes
+3. Test thoroughly
+4. Submit a pull request
+
+---
+
+## 📞 Support
+
+For questions or issues, contact the project team or create an issue in the repository.
+
+---
+
+**Happy Cooking! Let's reduce food waste together! 🌱**
