@@ -237,12 +237,12 @@ This ensures users don't accidentally submit the same recipe multiple times whil
 ## 👥 Team
 
 ### Backend Team
-- Developer 1: Recipe endpoints and business logic
-- Developer 2: Ingredient endpoints and recipe history tracking
+- Mathijs: Recipe endpoints and business logic
+- Isaac: Ingredient endpoints and recipe history tracking
 
 ### Frontend Team
-- Developer 3: User interface and recipe display
-- Developer 4: Search functionality and user interactions
+- Alex: User interface and recipe display
+- Andrew: Search functionality and user interactions
 
 ---
 
@@ -261,7 +261,7 @@ This ensures users don't accidentally submit the same recipe multiple times whil
 
 ## 📝 License
 
-This project is part of an academic group project.
+This project is part of the Holberton school, Australia curriculum.
 
 ---
 
@@ -275,10 +275,10 @@ This is a student project. If you're part of the team:
 
 ---
 
-## 📞 Support
-
-For questions or issues, contact the project team or create an issue in the repository.
-
----
-
 **Happy Cooking! Let's reduce food waste together! 🌱**
+
+Your developers:
+Mathijs
+Alex
+Isaac
+Andrew
