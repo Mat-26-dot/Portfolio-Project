@@ -10,17 +10,44 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Custom colours! */
+  --color-primary: #CFF0CB;
+  --color-secondary: #5d8958;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: white;
     --foreground: #ededed;
+    --test: #5d8958;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", sans-serif;
+
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Food icon background anims */
+@keyframes spriteFade {
+  0%   { opacity: 0 }
+  10%  { opacity: var(--alpha) }
+  90%  { opacity: var(--alpha) }
+  100% { opacity: 0 }
+}
+
+@keyframes spriteDrift {
+  0%   { transform: translate3d(0,0,0) }
+  100% { transform: translate3d(var(--dx), var(--dy), 0) }
+}
+
+@keyframes spriteSpin {
+  0%   { transform: rotate(0deg) }
+  100% { transform: rotate(var(--spinDeg)) }
 }
