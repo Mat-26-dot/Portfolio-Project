@@ -32,6 +32,7 @@ Our app is designed for:
 - 💼 **Busy Professionals** (like Marcus) - Quick 15-minute meals using leftovers after long workdays  
 - 🎓 **Students** (like Emma) - Budget-friendly recipes that save money and reduce dorm food waste
 
+<img width="1468" height="768" alt="image" src="https://github.com/user-attachments/assets/739049c5-da93-4da4-b34b-0f60bf83395c" />
 
 
 ---
