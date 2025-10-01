@@ -31,6 +31,7 @@ Our app is designed for:
 - 👩‍🎨 **Content Creators** (like Chloe) - Create aesthetic cooking content while reducing waste
 - 💼 **Busy Professionals** (like Marcus) - Quick 15-minute meals using leftovers after long workdays  
 - 🎓 **Students** (like Emma) - Budget-friendly recipes that save money and reduce dorm food waste
+
 https://github.com/Mat-26-dot/Portfolio-Project/blob/main/Screenshot%202025-09-08%20133655.png?raw=true
 
 ---
