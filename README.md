@@ -37,10 +37,10 @@ Our app is designed for:
 
 ---
 
+
 ### System Architecture - Upload Recipe Flow
 Our application follows a three-tier architecture ensuring clean separation of concerns:
-<div align="center">
-<img src="path/to/uml-diagram.png" alt="Upload Recipe UML Sequence Diagram" width="800"/>
+
 </div>
 🎯 How the UML Sequence Diagram Works
 🎨 Presentation Layer (Frontend)
@@ -65,6 +65,10 @@ This separation means:
 🧪 Business logic can be tested without UI or database
 🔄 Each layer can be updated without affecting others
 📈 System is scalable and maintainable
+
+
+---
+
 
 ## 🛠 Tech Stack
 
