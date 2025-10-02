@@ -47,7 +47,7 @@ Our application follows a three-tier architecture ensuring clean separation of c
 
 
 </div>
-
+---
 
 🎯 How the UML Sequence Diagram Works
 🎨 Presentation Layer (Frontend)
@@ -58,23 +58,24 @@ Recipe form displays input fields
 User fills in recipe details (title, description, instructions, ingredients)
 Form submits data to Business Logic Layer
 
+---
 
 This design choice makes sense because:
 
 
-👥 Recipe sharing - Multiple users can contribute their unique takes on popular dishes
-🛡️ Prevents accidents - Users won't accidentally duplicate their own submissions
-🌍 Community diversity - Encourages variety in the recipe database
-📊 Data integrity - Maintains clean user-specific recipe collections
+- Recipe sharing - Multiple users can contribute their unique takes on popular dishes
+- Prevents accidents - Users won't accidentally duplicate their own submissions
+- Community diversity - Encourages variety in the recipe database
+- Data integrity - Maintains clean user-specific recipe collections
 
 <img width="680" height="183" alt="Screenshot 2025-10-02 101408" src="https://github.com/user-attachments/assets/4eb8be8d-5c37-4d68-b67a-e7344daee09c" />
 
 This separation means:
 
-- 🔧 Frontend developers can work independently from backend
-- 🧪 Business logic can be tested without UI or database
-- 🔄 Each layer can be updated without affecting others
-- 📈 System is scalable and maintainable
+- Frontend developers can work independently from backend
+- Business logic can be tested without UI or database
+- Each layer can be updated without affecting others
+- System is scalable and maintainable
 
 
 ---
@@ -83,8 +84,8 @@ This separation means:
 ## 🛠 Tech Stack
 
 ### Frontend
-- HTML5, CSS3, JavaScript
-- Responsive design for mobile and desktop
+- HTML5, CSS3, JavaScript, React, Node.js
+- Responsive design for a we-based app MVP fit for demo day 
 
 ### Backend
 - **Python Flask** - Lightweight web framework
