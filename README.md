@@ -46,6 +46,7 @@ Our app is designed for:
 
 
 </div>
+
 🎯 How the UML Sequence Diagram Works
 🎨 Presentation Layer (Frontend)
 
@@ -54,7 +55,9 @@ Recipe form displays input fields
 User fills in recipe details (title, description, instructions, ingredients)
 Form submits data to Business Logic Layer
 
+
 This design choice makes sense because:
+
 
 👥 Recipe sharing - Multiple users can contribute their unique takes on popular dishes
 🛡️ Prevents accidents - Users won't accidentally duplicate their own submissions
