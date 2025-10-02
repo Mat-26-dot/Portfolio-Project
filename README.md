@@ -40,15 +40,18 @@ Our app is designed for:
 
 ## System Architecture - Upload Recipe Flow
 
-### Our application follows a three-tier architecture ensuring clean separation of concerns:
+Our application follows a three-tier architecture ensuring clean separation of concerns:
+
 
 <img width="1024" height="835" alt="Screenshot 2025-10-01 103200" src="https://github.com/user-attachments/assets/b5b7f0ac-ab6b-41f9-94c6-6cfcd355decf" />
 
 
 </div>
 
+
 🎯 How the UML Sequence Diagram Works
 🎨 Presentation Layer (Frontend)
+
 
 User clicks "Upload Recipe" button
 Recipe form displays input fields
