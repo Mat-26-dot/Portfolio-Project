@@ -2,7 +2,8 @@
 """Import everything that is needed from other files"""
 from datetime import datetime
 import uuid
-
+from sqlalchemy import Column, String, Float, Integer, Text, DateTime, Table, ForeignKey
+from sqlalchemy.orm import relationship
 
 # Define the many-to-many table
 
@@ -24,31 +25,31 @@ import uuid
     Reviews? - A few reviews if the recipe is public?
 """
 
-class Recipe():
+class Recipe(Base):
     """How the data is saved to the DataBase"""
     __tablename__ = 'Recipes'
     # Recipe ID
-    id =
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     # The User ID that uploaded
-    _owner_id =
+    _owner_id = Column("owner_id", String(60), ForeignKey('users.id'), nullable=False)
     # When the recipe was created and/or updated
-    created_at =
-    updated_at =
+    created_at = Column(DateTime, nullable=False, default=datetime.now())
+    updated_at = Column(DateTime, nullable=False, default=datetime.now())
     # Recipe title
-    _title =
+    _title = Column("title", String(100), nullable=False)
     # Breif description (optional?)
-    _description =
+    _description = Column("description", Text, nullable=False)
     # Grab ingredients from the ingredients table based on IDs
-    _ingredients_r =
+    _ingredients_r = relationship("Ingredients", secondary=recipe_ingredients, back_populates= 'recipe_r')
     # Method/instrcutions to make recipe
     _rec_method =
     # Cook time
-    _cook_time =
+    _cook_time = Column("cook_time", Float, nullable=False)
     # Difficulty of the recipe
-    _difficulty =
+    _difficulty = Column("difficulty", Integer, nullable=False)
     # Grab a few reviews (unsure about if we will do this)
     # _Reviews = 
-    owner_r =
+    owner_r = relationship("User", back_populates="recipes_r")
 
     def __init__(self, title, description, rec_method, cook_time, difficulty, owner_id):
         self.id = str(uuid.uuid4())
@@ -110,7 +111,7 @@ class Recipe():
     @difficulty.setter
     def difficulty(self, value):
         """Setter for Recipe difficulty"""
-        if isinstance(value, int) and value > 0 and value <= 10:
+        if isinstance(value, int) and value > 0 and value < 10:
             self._difficulty = value
         else:
             raise ValueError("Invalid value specified for difficulty!")
