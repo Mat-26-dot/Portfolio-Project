@@ -1,9 +1,13 @@
+# Isaac's backend code
 # Recipe Back-end Logic
 """Import everything that is needed from other files"""
 from datetime import datetime
 import uuid
 from sqlalchemy import Column, String, Float, Integer, Text, DateTime, Table, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+
+Base = declarative_base()
 
 # Define the many-to-many table
 
