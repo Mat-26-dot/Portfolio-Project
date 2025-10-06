@@ -25,3 +25,18 @@ yarn-error.log*
 # frontend
 **/node_modules
 **/.next
+
+# Python backend specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Environment files
+.env
