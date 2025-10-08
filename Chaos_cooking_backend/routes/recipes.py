@@ -1,6 +1,7 @@
 # Isaac's backend code
 # Recipe Back-end Logic
 """Import everything that is needed from other files"""
+
 from datetime import datetime
 import uuid
 from sqlalchemy import Column, String, Float, Integer, Text, DateTime, Table, ForeignKey
@@ -10,6 +11,12 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()
 
 # Define the many-to-many table
+recipe_ingredients = Table(
+    'recipe_ingredient',
+    Base.metadata,
+    Column('recipe_id', String(60), ForeignKey('recipe.id'), primary_key=True),
+    Column('ingredient_id', String(60), ForeignKey('ingredient.id'), primary_key=True)
+)
 
 """Recipes should have to the User-id that created it"""
 
@@ -35,7 +42,7 @@ class Recipe(Base):
     # Recipe ID
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     # The User ID that uploaded
-    _owner_id = Column("owner_id", String(60), ForeignKey('users.id'), nullable=False)
+    _created_by = Column("created_by", String(60), ForeignKey('users.id'), nullable=False)
     # When the recipe was created and/or updated
     created_at = Column(DateTime, nullable=False, default=datetime.now())
     updated_at = Column(DateTime, nullable=False, default=datetime.now())
@@ -46,7 +53,7 @@ class Recipe(Base):
     # Grab ingredients from the ingredients table based on IDs
     _ingredients_r = relationship("Ingredients", secondary=recipe_ingredients, back_populates= 'recipe_r')
     # Method/instrcutions to make recipe
-    _rec_method =
+    _instructions =
     # Cook time
     _cook_time = Column("cook_time", Float, nullable=False)
     # Difficulty of the recipe
@@ -55,16 +62,16 @@ class Recipe(Base):
     # _Reviews = 
     owner_r = relationship("User", back_populates="recipes_r")
 
-    def __init__(self, title, description, rec_method, cook_time, difficulty, owner_id):
+    def __init__(self, title, description, instructions, cook_time, difficulty, created_by):
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         self.title = title
         self.description = description
-        self.rec_method = rec_method
+        self.instructions = instructions
         self.cook_time = cook_time
         self.difficulty = difficulty
-        self.owner_id = owner_id
+        self.created_by = created_by
         self.ingredients = [] # List to store related ingredients
         # self.reviews = [] - List to store related reviews
 
@@ -121,3 +128,18 @@ class Recipe(Base):
             raise ValueError("Invalid value specified for difficulty!")
 
     # --- Methods ---
+    def save(self):
+        """Update the timestamp"""
+        self.updated_at = datetime.now()
+
+    def add_ingredient(self, ingredient):
+        """Add the ingredients to the recipe"""
+        self.ingredients.append(ingredient)
+
+    """def add_review(self, review):
+    Add a review to the recipe
+    self.reviews.append(review)"""
+
+    @staticmethod
+    def recipe_exists(recipe_id):
+        """Search through all Recipes to ensure the specified recipe_id exists"""
