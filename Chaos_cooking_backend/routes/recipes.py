@@ -7,8 +7,11 @@ import uuid
 from sqlalchemy import Column, String, Float, Integer, Text, DateTime, Table, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from flask import Blueprint
 
 Base = declarative_base()
+
+recipes_bp = Blueprint('recipes', __name__)
 
 # Define the many-to-many table
 recipe_ingredients = Table(
@@ -53,7 +56,7 @@ class Recipe(Base):
     # Grab ingredients from the ingredients table based on IDs
     _ingredients_r = relationship("Ingredients", secondary=recipe_ingredients, back_populates= 'recipe_r')
     # Method/instrcutions to make recipe
-    _instructions =
+    _instructions = Column("instructions", Text, nullable=False)
     # Cook time
     _cook_time = Column("cook_time", Float, nullable=False)
     # Difficulty of the recipe
