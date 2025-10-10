@@ -122,7 +122,7 @@ INSERT INTO recipes (title, description, instructions, prep_time, cook_time, ser
  10, 45, 8, 'easy', 1),
 
 ('Leftover Chicken Fried Rice', 
- 'Quick 15-minute meal using yesterday\'s chicken and rice. Perfect after work!', 
+ 'Quick 15-minute meal using yesterday''s chicken and rice. Perfect after work!', 
  '1. Heat oil in a large pan over high heat.
 2. Add cold leftover rice, breaking up clumps with a spoon.
 3. Push rice to one side, scramble hard-boiled eggs on the other.
