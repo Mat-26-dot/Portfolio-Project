@@ -146,3 +146,11 @@ class Recipe(Base):
     @staticmethod
     def recipe_exists(recipe_id):
         """Search through all Recipes to ensure the specified recipe_id exists"""
+
+# --- Endpoints ---
+
+""" Route /recipes GET all recipes
+    Route /user/recipes GET all recipes from a user
+    Route /recipes/most_viewed GET recipes with most viewed, made, etc (Maybe)
+    Route /user/recipes POST add a new recipe for that user (have an option for it to be public/private)
+    """
