@@ -1,8 +1,12 @@
 # Backend code logic for gamification features
 """Import everything that is needed from other files"""
 
+from flask import Blueprint, jsonify, request
+from db import get_db_connection
 import time
 import random
+
+virtual_pet_bp = Blueprint('virtual_pet', __name__)
 
 # Main loop - continuosly update pet's status, handle user input and display information
 class Pet:
@@ -12,6 +16,12 @@ class Pet:
         self.happiness = 50
         self.level = 1
         self.exp = 0
+        self.last_active = time.time()
+    
+    def update_inactivity(self):
+        """Check when the Pet was last active for and update hunger/happiness."""
+        now = time.time()
+        inactive_for = now - self.last_active
 
     def feed(self):
         self.hunger = max(0, self.hunger - 30)
@@ -56,18 +66,6 @@ class Game:
         # Exp increases Users points? - Ask Mat to help with this
         self.level = 1
 
-    """ def feed_pet(self):
-        self.pet.feed() # When a User saves a recipe or uses leftover ingredients
-        self.exp += 5 # Gain exp for feeding the pet
-        if self.pet.hunger < 20 and self.pet.happiness > 70:
-            print(f"{self.pet.name} is happy and satisified! ^-^")
-
-    def cook_together(self):
-        self.pet.play() # When a User cooks a recipe (could try to have the pet interact with the steps in real-time)
-        if self.pet.happiness >= 90:
-            self.level_up()
-            self.pet.level += 1 """
-
     def level_up(self):
         # Levels up the User
         self.level += 1
@@ -107,5 +105,9 @@ class Game:
     Pass_time - Decreases happiness and Increases hunger as time passes
     Expressions - Return expressions to visualise the Pet's status
     Pet_level - Increases when exp exceeds certain numbers
+
+    When the Pet is inactive for a specified amount of time, notify User with current status of the Pet
+    Exp should increment after certain levels - i.e. the higher the level the longer it takes to level up
 """
 # Note for Mat - when Play and Feed are called it should add the points to the point system
+"""Feed and play uses the point system"""
