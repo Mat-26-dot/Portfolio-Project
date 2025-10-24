@@ -7,11 +7,10 @@ CORS(app)
 
 # Import routes directly (no routes/ folder)
 from routes.recipes import recipes_bp
-from routes.ingredients import ingredients_bp
+# from routes.ingredients import ingredients_bp
 
 # Register blueprints
 app.register_blueprint(recipes_bp, url_prefix='/api/recipes')
-app.register_blueprint(ingredients_bp, url_prefix='/api/ingredients')
 
 @app.route('/')
 def home():
