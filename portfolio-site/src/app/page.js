@@ -43,7 +43,7 @@ export default function Home() {
                         Get Started →
                     </Link>
 
-                    <p className="text-gray-500 mt-6 text-sm">
+                    <p className="text-gray-400 mt-6 text-sm">
                         ✨ Join thousands reducing food waste, one meal at a time
                     </p>
                 </div>
