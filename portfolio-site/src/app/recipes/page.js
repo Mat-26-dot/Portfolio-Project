@@ -1,12 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import Link from "next/link"; // Remove this as we should not route out
+
+import { motion, AnimatePresence } from "framer-motion";
+import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function RecipesPage() {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+
+    const [active, setActive] = useState(null);
+    const [progress, setProgress] = useState({});
+
+    // Our icons for steps will be strings, converted to img
+    // Oven, Mix, Stove, Knife, Bowl, Whisk, Pan, Timer
 
     // Mock data matching Mat's database structure
     const mockRecipes = [
@@ -19,7 +28,45 @@ export default function RecipesPage() {
             servings: 8,
             difficulty_level: "easy",
             created_by_username: "chloe_creates",
-            ingredients: ["Browning Bananas", "Butter", "Flour", "Salt"]
+            image: 'https://www.marthastewart.com/thmb/irpFSo-hGcKsW9AtP4ke5vJruGE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/MSL-1511453-vegan-banana-bread-3x2-52f60a63082147059df51459a98bbae6.jpg',
+            ingredients: [
+                { name: "Browning Bananas", quantity: 3, unit: "" },
+                { name: "Butter", quantity: 100, unit: "g" },
+                { name: "Flour", quantity: 250, unit: "g" },
+                { name: "Salt", quantity: 0.5, unit: "tsp" },
+            ],
+            steps: [
+                {
+                    step: 1,
+                    instruction: "Preheat your oven to 350°F (175°C). Grease a loaf pan.",
+                    icon: "oven",
+                },
+                {
+                    step: 2,
+                    instruction: "In a bowl, mash the bananas until smooth.",
+                    icon: "bowl",
+                },
+                {
+                    step: 3,
+                    instruction: "Mix in melted butter, sugar, egg, and vanilla extract.",
+                    icon: "whisk",
+                },
+                {
+                    step: 4,
+                    instruction: "Add baking soda and salt. Stir in the flour last.",
+                    icon: "mix",
+                },
+                {
+                    step: 5,
+                    instruction: "Pour the batter into the loaf pan and bake for 45 minutes.",
+                    icon: "oven",
+                },
+                {
+                    step: 6,
+                    instruction: "Let it cool before slicing. Enjoy your banana bread!",
+                    icon: "timer",
+                },
+            ]
         },
         {
             id: 2,
@@ -96,8 +143,49 @@ export default function RecipesPage() {
         return prep + cook;
     };
 
+    // Open recipe funcs:
+    const onOpen = (recipe) => {
+        setActive({ recipe, stepIndex: progress[recipe.id] ?? 0 });
+    };
+
+    const onClose = () => {
+        setActive(null);
+    };
+
+    const onStep = (dir) => {
+        setActive((s) => {
+            if (!s) return s;
+            const total = s.recipe.steps?.length ?? 0;
+            const next = Math.min(Math.max(s.stepIndex + dir, 0), Math.max(total - 1, 0));
+            setProgress((p) => ({ ...p, [s.recipe.id]: next }));
+            return { ...s, stepIndex: next };
+        });
+    };
+
+
+    // Lock the background when "modal/recipe" is open
+    useEffect(() => {
+        if (!active) return;
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        const onKey = (e) => {
+            if (e.key === "Escape") onClose();
+            if (e.key === "ArrowRight") onStep(1);
+            if (e.key === "ArrowLeft") onStep(-1);
+            if (e.key === " ") {
+                e.preventDefault();
+                onStep(1);
+            }
+        };
+        window.addEventListener("keydown", onKey);
+        return () => {
+            document.body.style.overflow = prev;
+            window.removeEventListener("keydown", onKey);
+        }
+    }, [active]);
+
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-green-50">
+        <div className="min-h-screen bg-gradient-to-b from-white from-40% to-green-200">
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -118,7 +206,7 @@ export default function RecipesPage() {
                             placeholder="Search recipes..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:outline-none"
+                            className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:outline-none text-black"
                         />
                     </div>
 
@@ -151,16 +239,19 @@ export default function RecipesPage() {
                 {!loading && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         {filteredRecipes.map((recipe) => (
-                            <Link
+                            <motion.button
                                 key={recipe.id}
-                                href={`/recipes/${recipe.id}`}
-                                className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all transform hover:scale-105 overflow-hidden"
+                                layoutId={`recipe-${recipe.id}`}
+                                onClick={() => onOpen(recipe)}
+                                className="text-left bg-white rounded-lg shadow-md hover:shadow-xl transition-all hover:scale-[1.02] overflow-hidden focus:outline-none focus:ring-2 focus:ring-green-500 flex flex-col"
                             >
-                                {/* Recipe Image Placeholder */}
-                                <div className="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                                    <span className="text-6xl">🍳</span>
-                                </div>
-
+                                {recipe.image ? (
+                                    <img src={recipe.image} alt={recipe.title} className="h-48 w-full object-cover rounded-t-lg" />
+                                ) : (
+                                    <div className="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                                        <span className="text-6xl">🍳</span>
+                                    </div>
+                                )}
                                 {/* Recipe Content */}
                                 <div className="p-6">
                                     {/* Title */}
@@ -199,11 +290,17 @@ export default function RecipesPage() {
                                     <div className="mt-4 pt-4 border-t border-gray-100">
                                         <p className="text-xs text-gray-500 mb-2">Key ingredients:</p>
                                         <div className="flex flex-wrap gap-1">
-                                            {recipe.ingredients.slice(0, 3).map((ingredient, idx) => (
-                                                <span key={idx} className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded">
-                                                    {ingredient}
-                                                </span>
-                                            ))}
+                                            {recipe.ingredients.slice(0, 3).map((ingredient, idx) => {
+                                                const item = typeof ingredient === "string" ? { name: ingredient } : ingredient;
+                                                return (
+                                                    <span
+                                                        key={idx}
+                                                        className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded"
+                                                    >
+                                                        {item.name}
+                                                    </span>
+                                                );
+                                            })}
                                             {recipe.ingredients.length > 3 && (
                                                 <span className="text-xs text-gray-500 px-2 py-1">
                                                     +{recipe.ingredients.length - 3} more
@@ -212,7 +309,7 @@ export default function RecipesPage() {
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
+                            </motion.button>
                         ))}
                     </div>
                 )}
@@ -240,6 +337,224 @@ export default function RecipesPage() {
                     </div>
                 )}
             </div>
+
+            <AnimatePresence>
+                {active && (
+                    <>
+                        <motion.div
+                            onClick={onClose}
+                            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        />
+
+                        <motion.div
+                            role="dialog"
+                            aria-modal="true"
+                            aria-label={`${active.recipe.title} tutorial`}
+                            layoutId={`recipe-${active.recipe.id}`}
+                            className="fixed inset-4 md:inset-8 z-50 bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+                            initial={{ opacity: 0.9, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0.9, scale: 0.98 }}
+                            transition={{ duration: 0.15 }}
+                        >
+                            <div className="relative">
+                                <div className="h-40 md:h-56 relative flex items-center justify-center overflow-hidden rounded-t-2xl">
+                                    <img
+                                        src="https://cdn.midjourney.com/89ed6fe2-e1a1-4dbd-be65-6522aaaae509/0_3.png"
+                                        alt="Kitchen background"
+                                        className="absolute inset-0 w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-black/30" />
+                                    <span className="relative z-10 text-7xl drop-shadow-lg">🍳</span>
+                                </div>
+                                <button
+                                    onClick={onClose}
+                                    className="absolute top-3 right-3 inline-flex items-center gap-2 rounded-full bg-black/60 text-white px-3 py-2 text-sm hover:bg-black/70"
+                                >
+                                    <FaTimes className="w-4 h-4" />
+                                    <span>Esc</span>
+                                </button>
+                            </div>
+
+
+                            <div className="flex-1 overflow-y-auto p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <aside className="md:col-span-1 space-y-2 bg-stone-100 p-4 rounded-lg">
+                                    <div className="w-full rounded-2xl">
+                                        <img src={active.recipe.image} alt="" className="rounded-lg h-48 w-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-gray-900 mt-4">
+                                            {active.recipe.title}
+                                        </h2>
+                                        <p className="text-gray-600 mt-2 text-sm">{active.recipe.description}</p>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3 text-sm mt-4">
+                                        <div className="rounded-lg bg-stone-500 p-3">
+                                            <div className="text-gray-200">Total time</div>
+                                            <div className="font-semibold">
+                                                {getTotalTime(active.recipe.prep_time, active.recipe.cook_time)} min
+                                            </div>
+                                        </div>
+                                        <div className="rounded-lg bg-stone-500 p-3">
+                                            <div className="text-gray-200">Servings</div>
+                                            <div className="font-semibold">{active.recipe.servings}</div>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-black font-semibold text-xl mt-4">Ingredients</h3>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {active.recipe.ingredients.map((ing, i) => {
+                                            const ingredient = typeof ing === "string" ? { name: ing } : ing;
+                                            return (
+                                                <div
+                                                    key={i}
+                                                    className="flex items-center gap-2 bg-neutral-200 rounded-lg w-full p-2"
+                                                >
+                                                    <div className="bg-neutral-400 flex items-center justify-center rounded-lg h-10 w-10 shrink-0">
+                                                        <img
+                                                            src={ingredient.icon ? `/icons/${ingredient.icon}.svg` : null}
+                                                            alt=""
+                                                            className="w-5 h-5"
+                                                        />
+                                                    </div>
+
+                                                    <div className="flex flex-col leading-tight">
+                                                        <span className="text-gray-500 text-xs">
+                                                            {ingredient.quantity && ingredient.unit
+                                                                ? `${ingredient.quantity}${ingredient.unit}`
+                                                                : ingredient.quantity
+                                                                    ? ingredient.quantity
+                                                                    : "—"}
+                                                        </span>
+                                                        <span className="text-black font-medium">{ingredient.name}</span>
+                                                        {ingredient.prep && (
+                                                            <span className="text-gray-500 text-xs">{ingredient.prep}</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </aside>
+
+                                <section className="md:col-span-2 flex flex-col">
+                                    <StepProgress
+                                        current={active.stepIndex}
+                                        total={active.recipe.steps?.length ?? 0}
+                                    />
+
+                                    <div className="mt-4 md:mt-6 flex-1">
+                                        <AnimatePresence mode="wait">
+                                            <motion.div
+                                                key={active.stepIndex}
+                                                initial={{ opacity: 0, y: 8 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -8 }}
+                                                transition={{ duration: 0.18 }}
+                                                className="prose prose-sm md:prose base:text-gray-800 max-w-none"
+                                            >
+                                                {(() => {
+                                                    const stepObj = active.recipe.steps?.[active.stepIndex];
+                                                    if (!stepObj) {
+                                                        return <p className="text-gray-700">No steps provided.</p>;
+                                                    }
+                                                    return (
+                                                        <>
+                                                            <div className="flex items-center gap-3">
+                                                                <StepIcon name={stepObj.icon} />
+                                                                <h4 className="text-gray-900 font-semibold">
+                                                                    Step {stepObj.step ?? active.stepIndex + 1}
+                                                                </h4>
+                                                            </div>
+                                                            <p className="mt-2 text-gray-700 leading-relaxed">
+                                                                {stepObj.instruction}
+                                                            </p>
+                                                        </>
+                                                    );
+                                                })()}
+                                            </motion.div>
+                                        </AnimatePresence>
+                                    </div>
+
+                                    <div className="mt-6 flex items-center justify-between gap-2">
+                                        <button
+                                            onClick={() => onStep(-1)}
+                                            disabled={active.stepIndex === 0}
+                                            className="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm disabled:opacity-50"
+                                        >
+                                            <FaChevronLeft className="w-4 h-4" />
+                                            Prev
+                                        </button>
+                                        <div className="text-xs text-gray-500">Tip: use ← / → or Space</div>
+                                        <button
+                                            onClick={() => onStep(1)}
+                                            disabled={
+                                                active.stepIndex >= (active.recipe.steps?.length ?? 1) - 1
+                                            }
+                                            className="inline-flex items-center gap-2 rounded-lg bg-green-600 text-white px-4 py-2 text-sm hover:bg-green-700 disabled:opacity-50"
+                                        >
+                                            Next
+                                            <FaChevronRight className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </section>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+
         </div>
     );
 }
+
+function StepProgress({ current, total }) {
+    const pct = total > 0 ? Math.round(((current + 1) / total) * 100) : 0;
+    return (
+        <div className="w-full">
+            <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-gray-700">
+                    {total ? `${current + 1} / ${total} steps` : "No steps"}
+                </span>
+                <span className="text-xs text-gray-500">{pct}%</span>
+            </div>
+            <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
+                <motion.div
+                    className="h-full bg-green-600"
+                    initial={false}
+                    animate={{ width: `${pct}%` }}
+                    transition={{ type: "spring", stiffness: 200, damping: 24 }}
+                />
+            </div>
+        </div>
+    );
+}
+
+function StepIcon({ name }) {
+    // I will use this img when images are generated of companion
+    // return <img src={`/icons/${name}.svg`} alt={name} className="w-6 h-6" />;
+
+    const emoji = {
+        oven: "🔥",
+        bowl: "🥣",
+        whisk: "🌀",
+        mix: "🥄",
+        stove: "🍳",
+        knife: "🔪",
+        pan: "🍳",
+        timer: "⏲️",
+    }[name] ?? "🍽️";
+
+    return (
+        <span
+            aria-label={name}
+            className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-green-50 text-lg"
+            title={name}
+        >
+            {emoji}
+        </span>
+    );
+}
+
