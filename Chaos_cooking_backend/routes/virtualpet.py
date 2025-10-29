@@ -8,9 +8,9 @@ import random
 
 virtual_pet_bp = Blueprint('virtual_pet', __name__)
 
-# Main loop - continuosly update pet's status, handle user input and display information
+# Main loop - continuously update pet's status, handle user input and display information
 class Pet:
-    def __init__(self, user_id, name):
+    def __init__(self, user_id, name="Joe"):
         self.user_id = user_id
         self.name = name
         self.hunger = 50
@@ -22,35 +22,46 @@ class Pet:
 
     def load_from_db(self):
         conn = get_db_connection()
-        pet = conn.execute(
-            "SELECT * FROM pets WHERE user_id = ?", (self.user_id,)
-        ).fetchone()
-        conn.close()
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT name, hunger, happiness, level, exp, last_active FROM pets WHERE user_id = %s",
+            (self.user_id,)
+        )
+        result = cursor.fetchone()
 
-        if pet:
-            self.name = pet["name"]
-            self.hunger = pet["hunger"]
-            self.happiness = pet["happiness"]
-            self.level = pet["level"]
-            self.exp = pet["exp"]
-            self.last_active = pet["last_active"]
+        if result:
+            self.name = result['name']
+            self.hunger = float(result['hunger'])
+            self.happiness = float(result['happiness'])
+            self.level = int(result['level'])
+            self.exp = int(result['exp'])
+            self.last_active = float(result['last_active'])
+
         else:
             self.save_to_db()
 
+        cursor.close()
+        conn.close()
+
     def save_to_db(self):
         conn = get_db_connection()
-        conn.execute("""
+        cursor = conn.cursor()
+        cursor.execute(
+            """
             INSERT INTO pets (user_id, name, hunger, happiness, level, exp, last_active)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(user_id) DO UPDATE SET
-                name=excluded.name,
-                hunger=excluded.hunger,
-                happiness=excluded.happiness,
-                level=excluded.level,
-                exp=excluded.exp,
-                last_active=excluded.last_active
-        """, (self.user_id, self.name, self.hunger, self.happiness, self.level, self.exp, self.last_active))
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (user_id) DO UPDATE SET
+                name = EXCLUDED.name,
+                hunger = EXCLUDED.hunger,
+                happiness = EXCLUDED.happiness,
+                level = EXCLUDED.level,
+                exp = EXCLUDED.exp,
+                last_active = EXCLUDED.last_active
+            """,
+            (self.user_id, self.name, self.hunger, self.happiness, self.level, self.exp, self.last_active)
+        )
         conn.commit()
+        cursor.close()
         conn.close()
 
     def update_inactivity(self):
@@ -104,7 +115,7 @@ class Pet:
             "level": self.level,
             "exp": self.exp,
             "exp_required": round(exp_required, 1),
-            "inactivity": round(inactive_for, 1), # In seconds
+            "inactivity": round(inactive_for, 1),  # In seconds
             "expression": self.expression()
         }
         return status_msg
@@ -121,10 +132,10 @@ class Pet:
         else:
             return "crying"
 
+
 class Game:
-    def __init__(self):
-        self.pet = Pet("Joe")
-        # Exp increases Users points? - Ask Mat to help with this
+    def __init__(self, user_id, pet_name="Joe"):
+        self.pet = Pet(user_id, pet_name)
         self.level = 1
 
     def level_up(self):
@@ -133,29 +144,37 @@ class Game:
         print(f"{self.pet.name} would like to celebrate your level up! :D You reached {self.level}!")
 
 
-game = Game()
+# Don't instantiate Game at module level - causes errors
+# game = Game()  # Commented out
+
 
 @virtual_pet_bp.route('/status', methods=['GET'])
 def get_status():
     user_id = request.args.get('user_id', type=int)
-    pet = Pet(user_id)
+    pet_name = request.args.get('name', 'Joe')
+    pet = Pet(user_id, pet_name)
     return jsonify(pet.status())
+
 
 @virtual_pet_bp.route('/feed', methods=['POST'])
 def feed_pet():
     user_id = request.json.get('user_id')
-    pet = Pet(user_id)
+    pet_name = request.json.get('name', 'Joe')
+    pet = Pet(user_id, pet_name)
     pet.feed()
     pet.save_to_db()
     return jsonify({"message": f"You fed {pet.name}!", "status": pet.status()})
 
+
 @virtual_pet_bp.route('/play', methods=['POST'])
 def play_with_pet():
     user_id = request.json.get('user_id')
-    pet = Pet(user_id)
+    pet_name = request.json.get('name', 'Joe')
+    pet = Pet(user_id, pet_name)
     pet.play()
     pet.save_to_db()
     return jsonify({"message": f"You cooked with {pet.name}!", "status": pet.status()})
+
 
 """
     Feed - Decreases hunger, activates when a User saves a recipe or uses leftovers
