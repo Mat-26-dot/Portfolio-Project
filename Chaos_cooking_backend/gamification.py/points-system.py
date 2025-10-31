@@ -4,6 +4,12 @@ from db import get_db_connection
 
 ingredients_bp = Blueprint('ingredients', __name__)
 
+"""
+    get_user_points(user_id) - Gets the points from a specific user
+    get_user_achievements(user_id) - Lists the achievements linked to a user
+    get_share_stats - Gets sharable stats for social media
+"""
+
 @ingredients_bp.route('/gamification/points/<int:user_id>', methods=['GET'])
 def get_user_points(user_id):
     """Get total points for user (10 points per recipe cooked)"""

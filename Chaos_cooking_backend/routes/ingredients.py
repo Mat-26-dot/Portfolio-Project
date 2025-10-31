@@ -4,6 +4,14 @@ from db import get_db_connection
 
 ingredients_bp = Blueprint('ingredients', __name__)
 
+"""
+    get_all_ingredients() - Gets all the ingredients
+    get_ingredients_by_category() - Filters the ingredients by category
+    get_categories() - Lists all the distinct ingredient categories
+    add_recipe_history() - Tracks User actions
+    get_user_history(user_id) - Gets recipe history for a specific user
+"""
+
 @ingredients_bp.route('/', methods=['GET'])
 def get_all_ingredients():
     """Get all ingredeents from db"""

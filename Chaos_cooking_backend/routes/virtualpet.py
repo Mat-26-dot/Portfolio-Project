@@ -1,4 +1,16 @@
 # Backend code logic for gamification features
+
+"""
+    Feed - Decreases hunger, activates when a User saves a recipe or uses leftovers
+    Play (cook_together) - Increases happiness, gives pet exp, activates when a User marks a recipe as completed
+    Pet_exp - Increases when Feed or cook_together is called
+    Pass_time - Decreases happiness and Increases hunger as time passes
+    Expressions - Return expressions to visualise the Pet's status
+    Pet_level - Increases when exp exceeds certain numbers
+    When the Pet is inactive for a specified amount of time, notify User with current status of the Pet
+    Exp should increment after certain levels - i.e. the higher the level the longer it takes to level up
+"""
+
 """Import everything that is needed from other files"""
 
 from flask import Blueprint, jsonify, request
@@ -176,16 +188,6 @@ def play_with_pet():
     return jsonify({"message": f"You cooked with {pet.name}!", "status": pet.status()})
 
 
-"""
-    Feed - Decreases hunger, activates when a User saves a recipe or uses leftovers
-    Play (cook_together) - Increases happiness, gives pet exp, activates when a User marks a recipe as completed
-    Pet_exp - Increases when Feed or cook_together is called
-    Pass_time - Decreases happiness and Increases hunger as time passes
-    Expressions - Return expressions to visualise the Pet's status
-    Pet_level - Increases when exp exceeds certain numbers
 
-    When the Pet is inactive for a specified amount of time, notify User with current status of the Pet
-    Exp should increment after certain levels - i.e. the higher the level the longer it takes to level up
-"""
 # Note for Mat - when Play and Feed are called it should add the points to the point system
 """Feed and play uses the point system"""

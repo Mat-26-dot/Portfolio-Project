@@ -31,12 +31,13 @@ recipe_ingredients = Table(
     Created_by - User-ID that added the recipe
     Created_at
     Updated_at
-    Description? - Brief explanation of Recipe
+    Description - Brief explanation of Recipe
     Ingredients - Ingredients needed
     Method - How to make the recipe
-    Time - How long it takes to make
-    Difficulty? - How easy or challenging the recipe is
-    Reviews? - A few reviews if the recipe is public?
+    Prep_Time - How long it takes to prepare the recipe
+    Cook_time - How long the recipe takes to cook
+    Servings - How many servings
+    Difficulty - How easy or challenging the recipe is
 """
 
 class Recipe(Base):
