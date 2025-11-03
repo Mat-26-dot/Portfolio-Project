@@ -17,8 +17,8 @@ recipes_bp = Blueprint('recipes', __name__)
 recipe_ingredients = Table(
     'recipe_ingredient',
     Base.metadata,
-    Column('recipe_id', String(60), ForeignKey('recipe.id'), primary_key=True),
-    Column('ingredient_id', String(60), ForeignKey('ingredient.id'), primary_key=True)
+    Column('recipe_id', Integer, ForeignKey('recipes.id'), primary_key=True),
+    Column('ingredient_id', Integer, ForeignKey('ingredients.id'), primary_key=True)
 )
 
 """Recipes should have to the User-id that created it"""
@@ -39,6 +39,22 @@ recipe_ingredients = Table(
     Servings - How many servings
     Difficulty - How easy or challenging the recipe is
 """
+
+class Ingredient(Base):
+    __tablename__ = 'ingredients'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(100), nullable=False)
+    category = Column(String(100))
+    unit = Column(String(50))
+    calories_per_unit = Column(Float)
+    created_at = Column(DateTime, default=datetime.now)
+
+    recipes = relationship(
+        "Recipe",
+        secondary="recipe_ingredient",
+        back_populates="ingredients"
+    )
 
 class Recipe(Base):
     """Hw the data is saved to the DataBase"""
@@ -68,6 +84,12 @@ class Recipe(Base):
 
     _prep_time = Column("prep_time", Integer)
     _servings = Column("servings", Integer)
+
+    ingredients = relationship(
+        "Ingredient",
+        secondary=recipe_ingredients,
+        back_populates="recipes"
+    )
 
     def __init__(self, title, description, instructions, created_by, cook_time=None, prep_time=None, servings=1, difficulty=None):
         #self.id = str(uuid.uuid4())
