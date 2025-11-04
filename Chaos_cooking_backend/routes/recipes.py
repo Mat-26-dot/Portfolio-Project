@@ -77,7 +77,7 @@ class Recipe(Base):
     # Cook time
     _cook_time = Column("cook_time", Float, nullable=False)
     # Difficulty of the recipe
-    _difficulty_level = Column(Integer, nullable=False)
+    _difficulty = Column(Integer, nullable=False)
     # Grab a few reviews (unsure about if we will do this)
     # _Reviews
     # owner_r = relationship("User", back_populates="recipes_r")
