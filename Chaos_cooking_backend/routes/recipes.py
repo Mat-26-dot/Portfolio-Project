@@ -77,7 +77,7 @@ class Recipe(Base):
     # Cook time
     _cook_time = Column("cook_time", Float, nullable=False)
     # Difficulty of the recipe
-    _difficulty_level = Column(String(20))
+    _difficulty_level = Column(Integer, nullable=False)
     # Grab a few reviews (unsure about if we will do this)
     # _Reviews
     # owner_r = relationship("User", back_populates="recipes_r")
@@ -275,6 +275,7 @@ def create_recipe():
         new_recipe = Recipe(
             title=data['title'],
             description=data['description'],
+            difficulty=data.get['difficulty'],
             instructions=data['instructions'],
             created_by=data['created_by'],
             cook_time=data.get('cook_time'),
