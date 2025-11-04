@@ -17,11 +17,6 @@ app.register_blueprint(recipes_bp, url_prefix='/api/recipes')
 def home():
     return {'message': 'Food Wastage API is running!'}, 200
 
-if __name__ == '__main__':
-    # Base.metadata.create_all(engine)
-    port = int(os.getenv('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
-
 @app.route('/debug-db')
 def debug_db():
     """Test to verify which database is connected and how many recipes exist"""
@@ -37,4 +32,8 @@ def debug_db():
         }
     except Exception as e:
         return {'error': str(e)}, 500
-    
+
+if __name__ == '__main__':
+    # Base.metadata.create_all(engine)
+    port = int(os.getenv('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
