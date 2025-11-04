@@ -15,7 +15,7 @@ recipes_bp = Blueprint('recipes', __name__)
 
 # Define the many-to-many table
 recipe_ingredients = Table(
-    'recipe_ingredient',
+    'recipe_ingredients',
     Base.metadata,
     Column('recipe_id', Integer, ForeignKey('recipes.id'), primary_key=True),
     Column('ingredient_id', Integer, ForeignKey('ingredients.id'), primary_key=True)
@@ -52,7 +52,7 @@ class Ingredient(Base):
 
     recipes = relationship(
         "Recipe",
-        secondary="recipe_ingredient",
+        secondary="recipe_ingredients",
         back_populates="ingredients"
     )
 
@@ -77,7 +77,7 @@ class Recipe(Base):
     # Cook time
     _cook_time = Column("cook_time", Float, nullable=False)
     # Difficulty of the recipe
-    _difficulty_level = Column("difficulty_level", Integer, nullable=False)
+    _difficulty_level = Column(String(20))
     # Grab a few reviews (unsure about if we will do this)
     # _Reviews
     # owner_r = relationship("User", back_populates="recipes_r")
