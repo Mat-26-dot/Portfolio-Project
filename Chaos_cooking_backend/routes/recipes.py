@@ -275,7 +275,7 @@ def create_recipe():
         new_recipe = Recipe(
             title=data['title'],
             description=data['description'],
-            difficulty=data.get['difficulty'],
+            difficulty=data.get('difficulty'),
             instructions=data['instructions'],
             created_by=data['created_by'],
             cook_time=data.get('cook_time'),
