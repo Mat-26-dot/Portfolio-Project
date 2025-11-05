@@ -159,6 +159,25 @@ class Game:
 # Don't instantiate Game at module level - causes errors
 # game = Game()  # Commented out
 
+@virtual_pet_bp.route('/debug-db', methods=['GET'])
+def debug_db():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT current_database(), current_user;")
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return jsonify({
+            'success': True,
+            'current_database': result['current_database'],
+            'current_user': result['current_user']
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
 
 @virtual_pet_bp.route('/status', methods=['GET'])
 def get_status():
