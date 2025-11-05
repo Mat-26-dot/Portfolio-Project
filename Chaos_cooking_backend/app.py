@@ -9,11 +9,13 @@ CORS(app)
 # Import routes directly (no routes/ folder)
 from routes.recipes import Base, engine, recipes_bp
 from routes.ingredients import ingredients_bp
+from routes.virtualpet import virtual_pet_bp
 # from routes.ingredients import ingredients_bp
 
 # Register blueprints
 app.register_blueprint(recipes_bp, url_prefix='/api/recipes')
 app.register_blueprint(ingredients_bp, url_prefix='/api/ingredients')
+app.register_blueprint(virtual_pet_bp, url_prefix='/virtual-pet')
 
 @app.route('/')
 def home():
