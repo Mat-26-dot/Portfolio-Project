@@ -15,11 +15,11 @@ ingredients_bp = Blueprint('ingredients', __name__)
 @ingredients_bp.route('/', methods=['GET'])
 def get_all_ingredients():
     """Get all ingredeents from db"""
-    print("Connected to:", conn.get_dsn_parameters())
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        
+        print("Connected to:", conn.get_dsn_parameters())
+
         cursor.execute("""
             SELECT 
                 id,
