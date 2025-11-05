@@ -16,7 +16,6 @@
 from flask import Blueprint, jsonify, request
 from db import get_db_connection
 import time
-import random
 
 virtual_pet_bp = Blueprint('virtual_pet', __name__)
 
@@ -144,8 +143,12 @@ class Pet:
         else:
             return "crying"
 
+def get_or_create_pet(user_id, pet_name="Joe"):
+    if not user_id:
+        raise ValueError("user_id is required")
+    return Pet(user_id, pet_name)
 
-class Game:
+"""class Game:
     def __init__(self, user_id, pet_name="Joe"):
         self.pet = Pet(user_id, pet_name)
         self.level = 1
@@ -153,7 +156,7 @@ class Game:
     def level_up(self):
         # Levels up the User
         self.level += 1
-        print(f"{self.pet.name} would like to celebrate your level up! :D You reached {self.level}!")
+        print(f"{self.pet.name} would like to celebrate your level up! :D You reached {self.level}!")"""
 
 
 # Don't instantiate Game at module level - causes errors
@@ -183,6 +186,10 @@ def debug_db():
 def get_status():
     user_id = request.args.get('user_id', type=int)
     pet_name = request.args.get('name', 'Joe')
+
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+
     pet = Pet(user_id, pet_name)
     return jsonify(pet.status())
 
@@ -191,6 +198,10 @@ def get_status():
 def feed_pet():
     user_id = request.json.get('user_id')
     pet_name = request.json.get('name', 'Joe')
+
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+
     pet = Pet(user_id, pet_name)
     pet.feed()
     pet.save_to_db()
@@ -201,12 +212,14 @@ def feed_pet():
 def play_with_pet():
     user_id = request.json.get('user_id')
     pet_name = request.json.get('name', 'Joe')
+
+    if not user_id:
+        return jsonify({"error": "user_id is required"}), 400
+
     pet = Pet(user_id, pet_name)
     pet.play()
     pet.save_to_db()
     return jsonify({"message": f"You cooked with {pet.name}!", "status": pet.status()})
-
-
 
 # Note for Mat - when Play and Feed are called it should add the points to the point system
 """Feed and play uses the point system"""
