@@ -17,8 +17,10 @@ def get_all_ingredients():
     """Get all ingredeents from db"""
     try:
         conn = get_db_connection()
-        print("Connected to:", conn.get_dsn_parameters())
         cursor = conn.cursor()
+
+        db_info = conn.get_dsn_parameters()
+
         cursor.execute("""
             SELECT 
                 id,
