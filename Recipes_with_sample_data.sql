@@ -57,6 +57,17 @@ CREATE TABLE recipe_history (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create Pets table
+CREATE TABLE IF NOT EXISTS pets (
+    user_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL DEFAULT 'Joe',
+    hunger NUMERIC(5,2) NOT NULL DEFAULT 50,
+    happiness NUMERIC(5,2) NOT NULL DEFAULT 50,
+    level INT NOT NULL DEFAULT 1,
+    exp INT NOT NULL DEFAULT 0,
+    last_active DOUBLE PRECISION NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW())
+);
+
 -- INSERT SAMPLE DATA
 
 -- Sample Users (Real personas for leftover app)
@@ -221,6 +232,11 @@ INSERT INTO recipe_history (user_id, recipe_id, action, rating, notes) VALUES
 (3, 5, 'viewed', NULL, 'Gonna make this when bread goes stale again'),
 (3, 4, 'cooked', 3, 'Good but ran out of hot sauce halfway through');
 
+-- Sample Starter Pets
+INSERT INTO pets (user_id, name)
+SELECT id, 'Fluffy' FROM users
+ON CONFLICT (user_id) DO NOTHING;
+
 -- Create some useful views for common queries
 CREATE VIEW recipe_details AS
 SELECT 
@@ -248,6 +264,18 @@ JOIN recipe_ingredients ri ON r.id = ri.recipe_id
 JOIN ingredients i ON ri.ingredient_id = i.id
 ORDER BY r.title, i.name;
 
+CREATE VIEW user_pet_status AS
+SELECT u.id AS user_id,
+    u.username,
+    p.name AS pet_name,
+    p.hunger,
+    p.happiness,
+    p.level,
+    p.exp,
+    p.last_active
+FROM users u
+LEFT JOIN pets p ON u.id = p.user_id;
+
 -- Display summary of what was created
 SELECT 'Database Setup Complete!' as status;
 SELECT 'Tables Created:' as info, COUNT(*) as count FROM information_schema.tables WHERE table_schema = 'public';
@@ -255,3 +283,4 @@ SELECT 'Users Added:' as info, COUNT(*) as count FROM users;
 SELECT 'Ingredients Added:' as info, COUNT(*) as count FROM ingredients;
 SELECT 'Recipes Added:' as info, COUNT(*) as count FROM recipes;
 SELECT 'Recipe History Entries:' as info, COUNT(*) as count FROM recipe_history;
+SELECT 'Pets Added:' as info, COUNT(*) as count FROM pets;
