@@ -19,7 +19,7 @@ def get_all_ingredients():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        db_info = conn.get_dsn_parameters()
+        # db_info = conn.get_dsn_parameters() for debugging only
 
         cursor.execute("""
             SELECT 
@@ -39,7 +39,7 @@ def get_all_ingredients():
         
         return jsonify({
             'success': True,
-            'connected_to': db_info, # Remove before recording
+            # 'connected_to': db_info, Remove before recording
             'count': len(ingredients),
             'data': ingredients
         }), 200
