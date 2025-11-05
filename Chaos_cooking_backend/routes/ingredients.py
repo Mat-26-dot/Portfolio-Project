@@ -39,6 +39,7 @@ def get_all_ingredients():
         
         return jsonify({
             'success': True,
+            'connected_to': db_info, # Remove before recording
             'count': len(ingredients),
             'data': ingredients
         }), 200
