@@ -5,6 +5,20 @@ import Link from "next/link"; // Remove this as we should not route out
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
+// Mascot logic
+const MASCOT_SRC = {
+    base: "/mascot/base.png",
+    cheeky: "/mascot/cheeky.png",
+    sad: "/mascot/sad.png",
+};
+
+const mascotVariants = {
+    initial: { opacity: 0, y: 12 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 12 },
+};
+
+
 export default function RecipesPage() {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -13,6 +27,25 @@ export default function RecipesPage() {
 
     const [active, setActive] = useState(null);
     const [progress, setProgress] = useState({});
+
+    const [mascotMood, setMascotMood] = useState("base");
+
+    useEffect(() => {
+        Object.values(MASCOT_SRC).forEach((src) => {
+            const img = new Image();
+            img.src = src;
+        });
+    }, []);
+
+    // MASCOT TEMP DEV LOGIC
+    const moods = ["base", "cheeky", "sad"];
+
+    function cycleMood() {
+        setMascotMood((prev) => {
+            const idx = moods.indexOf(prev);
+            return moods[(idx + 1) % moods.length];
+        });
+    }
 
     // Our icons for steps will be strings, converted to img
     // Oven, Mix, Stove, Knife, Bowl, Whisk, Pan, Timer
@@ -361,14 +394,34 @@ export default function RecipesPage() {
                             transition={{ duration: 0.15 }}
                         >
                             <div className="relative">
-                                <div className="h-40 md:h-56 relative flex items-center justify-center overflow-hidden rounded-t-2xl">
+                                <div className="h-40 md:h-56 relative flex items-end justify-center overflow-hidden rounded-t-2xl">
                                     <img
                                         src="https://cdn.midjourney.com/89ed6fe2-e1a1-4dbd-be65-6522aaaae509/0_3.png"
                                         alt="Kitchen background"
                                         className="absolute inset-0 w-full h-full object-cover"
                                     />
                                     <div className="absolute inset-0 bg-black/30" />
-                                    <span className="relative z-10 text-7xl drop-shadow-lg">🍳</span>
+                                    <AnimatePresence mode="wait" initial={false}>
+                                        <motion.img
+                                            key={MASCOT_SRC[mascotMood] || MASCOT_SRC.base}
+                                            src={MASCOT_SRC[mascotMood] || MASCOT_SRC.base}
+                                            alt={`Chaos Cooking mascot - ${mascotMood}`}
+                                            className="h-full z-50"
+                                            variants={mascotVariants}
+                                            initial="initial"
+                                            animate="animate"
+                                            exit="exit"
+                                            transition={{ duration: 0.28, ease: "easeOut" }}
+                                        />
+                                    </AnimatePresence>
+                                    {/* Dev mood cycle button */}
+                                    <button
+                                        onClick={cycleMood}
+                                        className="z-[9999] bg-green-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-700 transition"
+                                    >
+                                        Cycle Mood ({mascotMood})
+                                    </button>
+
                                 </div>
                                 <button
                                     onClick={onClose}
