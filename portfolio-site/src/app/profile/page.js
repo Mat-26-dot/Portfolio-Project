@@ -185,20 +185,33 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Virtual Pet Placeholder */}
+                {/* Virtual Pet Placeholder */}
                 <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg shadow-lg p-8 mb-8 text-white text-center">
                     <h2 className="text-2xl font-bold mb-4">🐾 Your Cooking Companion</h2>
-                    <Image
-                        src="/mascot-happy.png"
-                        alt="Happy cooking companion"
-                        width={120}
-                        height={100}
-                        className="mx-auto mb-4"
-                    />
-                    <p className="text-2xl font-bold mb-2">Your pet is happy!</p>
-                    <p className="text-sm opacity-90 mb-4">
-                        Keep cooking to maintain your streak and keep your companion happy!
+                    <div
+                        onClick={() => {
+                            // Toggle between happy and sad
+                            const newRecipes = userData.recipes_cooked >= 5 ? 2 : 7;
+                            setUserData({ ...userData, recipes_cooked: newRecipes });
+                        }}
+                        className="cursor-pointer"
+                    >
+                        <Image
+                            src={userData.recipes_cooked >= 5 ? "/mascot-happy.png" : "/mascot-sad.png"}
+                            alt="Cooking companion"
+                            width={120}
+                            height={100}
+                            className="mx-auto mb-4"
+                        />
+                    </div>
+                    <p className="text-2xl font-bold mb-2">
+                        {userData.recipes_cooked >= 5 ? "Your pet is happy!" : "Your pet is sad..."}
                     </p>
-
+                    <p className="text-sm opacity-90 mb-4">
+                        {userData.recipes_cooked >= 5
+                            ? "Keep cooking to maintain your streak and keep your companion happy!"
+                            : "Cook more recipes to cheer up your companion!"}
+                    </p>
                 </div>
 
                 {/* Social Share Section */}
