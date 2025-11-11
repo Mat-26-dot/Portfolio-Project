@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS pets (
+    user_id      INT PRIMARY KEY,
+    name         VARCHAR(50) NOT NULL DEFAULT 'Joe',
+    hunger       NUMERIC(5,2) NOT NULL DEFAULT 50,
+    happiness    NUMERIC(5,2) NOT NULL DEFAULT 50,
+    level        INT NOT NULL DEFAULT 1,
+    exp          INT NOT NULL DEFAULT 0,
+    last_active  DOUBLE PRECISION NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW())
+);

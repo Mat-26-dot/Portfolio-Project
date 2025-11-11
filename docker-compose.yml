@@ -13,3 +13,4 @@ services:
     volumes:
       - ./portfolio-site:/app        # live code sync
       - /app/node_modules            # keep container's node_modules
+      - # ./create_pets_table.sql:/docker-entrypoint-initdb.d/create_pets_table.sql creates tables for the virtual pet
