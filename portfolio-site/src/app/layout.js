@@ -1,6 +1,7 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navigation from "./components/Navigation";
+import { RecipeProvider } from "./RecipeContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,8 +19,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
-        <Navigation />
-        {children}
+        <RecipeProvider>
+          <Navigation />
+          {children}
+        </RecipeProvider>
       </body>
     </html>
   );

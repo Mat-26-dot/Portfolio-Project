@@ -1,9 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import Link from "next/link"; // Remove this as we should not route out
+import Link from "next/link";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useContext } from "react";
+import { RecipeContext } from "../RecipeContext";
 
 // Mascot logic
 const MASCOT_SRC = {
@@ -23,12 +25,13 @@ export default function RecipesPage() {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+    const [selectedTime, setSelectedTime] = useState("all");
 
     const [active, setActive] = useState(null);
     const [progress, setProgress] = useState({});
 
     const [mascotMood, setMascotMood] = useState("base");
+    const { submittedRecipe } = useContext(RecipeContext);
 
     useEffect(() => {
         Object.values(MASCOT_SRC).forEach((src) => {
@@ -46,9 +49,6 @@ export default function RecipesPage() {
             return moods[(idx + 1) % moods.length];
         });
     }
-
-    // Our icons for steps will be strings, converted to img
-    // Oven, Mix, Stove, Knife, Bowl, Whisk, Pan, Timer
 
     // Mock data matching Mat's database structure
     const mockRecipes = [
@@ -110,6 +110,7 @@ export default function RecipesPage() {
             servings: 2,
             difficulty_level: "easy",
             created_by_username: "marcus_busy",
+            image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&h=300&fit=crop',
             ingredients: ["Cooked Chicken", "Leftover Rice", "Hard-boiled Eggs", "Half Onion", "Sad Bell Peppers"]
         },
         {
@@ -121,6 +122,7 @@ export default function RecipesPage() {
             servings: 1,
             difficulty_level: "easy",
             created_by_username: "emma_student",
+            image: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=500&h=300&fit=crop',
             ingredients: ["Browning Bananas", "Overripe Berries", "Soft Apples", "Day-old Bread"]
         },
         {
@@ -132,6 +134,7 @@ export default function RecipesPage() {
             servings: 2,
             difficulty_level: "easy",
             created_by_username: "marcus_busy",
+            image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&h=300&fit=crop',
             ingredients: ["Wilted Spinach", "Soft Carrots", "Sad Bell Peppers", "Leftover Mushrooms", "Hard-boiled Eggs"]
         },
         {
@@ -143,6 +146,7 @@ export default function RecipesPage() {
             servings: 4,
             difficulty_level: "medium",
             created_by_username: "chloe_creates",
+            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&h=300&fit=crop',
             ingredients: ["Day-old Bread", "Overripe Berries", "Hard-boiled Eggs", "Butter"]
         }
     ];
@@ -150,17 +154,32 @@ export default function RecipesPage() {
     useEffect(() => {
         // Simulate API call
         setTimeout(() => {
-            setRecipes(mockRecipes);
+            let allRecipes = mockRecipes;
+            if (submittedRecipe) {
+                allRecipes = [submittedRecipe, ...mockRecipes];
+            }
+            setRecipes(allRecipes);
             setLoading(false);
         }, 500);
-    }, []);
+    }, [submittedRecipe]);
 
-    // Filter recipes based on search and difficulty
+    // Helper function to get total time
+    const getTotalTime = (prep, cook) => {
+        return prep + cook;
+    };
+
+    // Filter recipes based on search and time
     const filteredRecipes = recipes.filter(recipe => {
         const matchesSearch = recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             recipe.description.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesDifficulty = selectedDifficulty === "all" || recipe.difficulty_level === selectedDifficulty;
-        return matchesSearch && matchesDifficulty;
+
+        const totalTime = getTotalTime(recipe.prep_time, recipe.cook_time);
+        const matchesTime = selectedTime === "all" ||
+            (selectedTime === "quick" && totalTime <= 10) ||
+            (selectedTime === "medium" && totalTime > 10 && totalTime <= 20) ||
+            (selectedTime === "slow" && totalTime > 20);
+
+        return matchesSearch && matchesTime;
     });
 
     const getDifficultyColor = (difficulty) => {
@@ -170,10 +189,6 @@ export default function RecipesPage() {
             case "hard": return "bg-red-100 text-red-800";
             default: return "bg-gray-100 text-gray-800";
         }
-    };
-
-    const getTotalTime = (prep, cook) => {
-        return prep + cook;
     };
 
     // Open recipe funcs:
@@ -243,18 +258,23 @@ export default function RecipesPage() {
                         />
                     </div>
 
-                    {/* Difficulty Filter */}
+                    {/* Time Filter */}
                     <div className="flex justify-center gap-2">
-                        {["all", "easy", "medium", "hard"].map((difficulty) => (
+                        {[
+                            { value: "all", label: "All" },
+                            { value: "quick", label: "< 10 mins" },
+                            { value: "medium", label: "10-20 mins" },
+                            { value: "slow", label: "> 20 mins" }
+                        ].map((option) => (
                             <button
-                                key={difficulty}
-                                onClick={() => setSelectedDifficulty(difficulty)}
-                                className={`px-6 py-2 rounded-full font-medium transition-all capitalize ${selectedDifficulty === difficulty
+                                key={option.value}
+                                onClick={() => setSelectedTime(option.value)}
+                                className={`px-6 py-2 rounded-full font-medium transition-all ${selectedTime === option.value
                                     ? "bg-green-500 text-white shadow-lg scale-105"
                                     : "bg-white text-gray-700 hover:bg-gray-100 shadow"
                                     }`}
                             >
-                                {difficulty}
+                                {option.label}
                             </button>
                         ))}
                     </div>
@@ -323,7 +343,7 @@ export default function RecipesPage() {
                                     <div className="mt-4 pt-4 border-t border-gray-100">
                                         <p className="text-xs text-gray-500 mb-2">Key ingredients:</p>
                                         <div className="flex flex-wrap gap-1">
-                                            {recipe.ingredients.slice(0, 3).map((ingredient, idx) => {
+                                            {(Array.isArray(recipe.ingredients) ? recipe.ingredients : recipe.ingredients.split('\n')).slice(0, 3).map((ingredient, idx) => {
                                                 const item = typeof ingredient === "string" ? { name: ingredient } : ingredient;
                                                 return (
                                                     <span
@@ -354,7 +374,7 @@ export default function RecipesPage() {
                         <button
                             onClick={() => {
                                 setSearchTerm("");
-                                setSelectedDifficulty("all");
+                                setSelectedTime("all");
                             }}
                             className="text-green-600 hover:text-green-700 font-medium"
                         >
@@ -586,9 +606,6 @@ function StepProgress({ current, total }) {
 }
 
 function StepIcon({ name }) {
-    // I will use this img when images are generated of companion
-    // return <img src={`/icons/${name}.svg`} alt={name} className="w-6 h-6" />;
-
     const emoji = {
         oven: "🔥",
         bowl: "🥣",
@@ -610,4 +627,3 @@ function StepIcon({ name }) {
         </span>
     );
 }
-

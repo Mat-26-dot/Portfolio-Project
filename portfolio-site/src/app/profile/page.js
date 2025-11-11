@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ProfilePage() {
     const [userData, setUserData] = useState(null);
@@ -158,8 +159,8 @@ export default function ProfilePage() {
                             <div
                                 key={index}
                                 className={`text-center p-4 rounded-lg border-2 transition-all ${achievement.unlocked
-                                        ? "border-green-500 bg-green-50"
-                                        : "border-gray-200 bg-gray-50 opacity-50"
+                                    ? "border-green-500 bg-green-50"
+                                    : "border-gray-200 bg-gray-50 opacity-50"
                                     }`}
                             >
                                 <div className="text-5xl mb-2">
@@ -186,39 +187,29 @@ export default function ProfilePage() {
                 {/* Virtual Pet Placeholder */}
                 <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg shadow-lg p-8 mb-8 text-white text-center">
                     <h2 className="text-2xl font-bold mb-4">🐾 Your Cooking Companion</h2>
-                    <div className="text-8xl mb-4">😊</div>
-                    <p className="text-lg mb-2">Your pet is happy!</p>
-                    <p className="text-sm opacity-90">
+                    <Image
+                        src="/mascot-happy.png"
+                        alt="Happy cooking companion"
+                        width={120}
+                        height={100}
+                        className="mx-auto mb-4"
+                    />
+                    <p className="text-2xl font-bold mb-2">Your pet is happy!</p>
+                    <p className="text-sm opacity-90 mb-4">
                         Keep cooking to maintain your streak and keep your companion happy!
                     </p>
-                    <div className="mt-4 bg-white bg-opacity-30 rounded-lg p-3">
-                        <p className="text-xs opacity-75 mb-2">Happiness Level</p>
-                        <div className="bg-white bg-opacity-30 rounded-full h-3 overflow-hidden">
-                            <div
-                                className="bg-white h-full rounded-full"
-                                style={{ width: '85%' }}
-                            ></div>
-                        </div>
-                    </div>
-                    <p className="text-xs mt-4 opacity-75">
-                        🚧 Virtual pet feature by Isaac - Coming soon!
-                    </p>
+
                 </div>
 
                 {/* Social Share Section */}
-                <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+                <div className="bg-white rounded-lg shadow-lg p-6 text-center mb-8">
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">
                         📢 Share Your Progress
                     </h2>
                     <p className="text-gray-600 mb-6">
                         Show off your food waste reduction achievements!
                     </p>
-                    <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
-                        <p className="text-sm text-gray-700 italic">
-                            "I've saved {userData.ingredients_saved} ingredients from waste by cooking{" "}
-                            {userData.recipes_cooked} recipes with Chaos Cooking! 🍳♻️"
-                        </p>
-                    </div>
+
                     <button
                         onClick={handleShare}
                         className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all transform hover:scale-105"
@@ -227,15 +218,7 @@ export default function ProfilePage() {
                     </button>
                 </div>
 
-                {/* Call to Action */}
-                <div className="text-center mt-8">
-                    <Link
-                        href="/recipes"
-                        className="inline-block bg-gradient-to-r from-green-400 to-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all transform hover:scale-105"
-                    >
-                        Cook More Recipes →
-                    </Link>
-                </div>
+
 
             </div>
         </div>
