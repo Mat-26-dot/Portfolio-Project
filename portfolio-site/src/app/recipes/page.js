@@ -20,7 +20,6 @@ const mascotVariants = {
     exit: { opacity: 0, y: 12 },
 };
 
-
 export default function RecipesPage() {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -150,6 +149,25 @@ export default function RecipesPage() {
             ingredients: ["Day-old Bread", "Overripe Berries", "Hard-boiled Eggs", "Butter"]
         }
     ];
+
+    // When we pull from API, we remap incoming data, structured here.
+    function normalizeRecipe(r) {
+        return {
+            id: r.id,
+            title: r.title ?? "Failed to load",
+            description: r.description ?? "",
+            prep_time: r.prep_time ?? 0,
+            cook_time: r.cook_time ?? 0,
+            servings: r.servings ?? 1,
+            difficulty_level: r.difficulty_level ?? "easy",
+            created_by_username: r.created_by_username ?? "unknown",
+            image: r.image || r.image_url || "",
+            ingredients: Array.isArray(r.ingredients)
+                ? r.ingredients
+                : (typeof r.ingredients === "string" ? r.ingredients.split("\n").filter(Boolean) : []),
+            steps: Array.isArray(r.steps) ? r.steps : [],
+        };
+    }
 
     useEffect(() => {
         // Simulate API call
