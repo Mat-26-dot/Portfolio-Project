@@ -206,7 +206,7 @@ engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
 
 # --- Flask Routes ---
-@recipes_bp.route('/', methods=['GET'])
+@recipes_bp.route('/fetch-recipes', methods=['GET'])
 def get_all_recipes():
     """Test endpoint to get all recipes"""
     try:
