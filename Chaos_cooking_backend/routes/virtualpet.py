@@ -162,47 +162,24 @@ def get_or_create_pet(user_id, pet_name="Joe"):
 # Don't instantiate Game at module level - causes errors
 # game = Game()  # Commented out
 
-@virtual_pet_bp.route('/debug-db', methods=['GET'])
-def debug_db():
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT current_database(), current_user;")
-        result = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        return jsonify({
-            'success': True,
-            'current_database': result['current_database'],
-            'current_user': result['current_user']
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        })
-
 @virtual_pet_bp.route('/status', methods=['GET'])
 def get_status():
     user_id = request.args.get('user_id', type=int)
-    pet_name = request.args.get('name', 'Joe')
-
     if not user_id:
         return jsonify({"error": "user_id is required"}), 400
 
-    pet = Pet(user_id, pet_name)
+    pet = Pet(user_id, name="Biscuit Bakes")
     return jsonify(pet.status())
 
 
 @virtual_pet_bp.route('/feed', methods=['POST'])
 def feed_pet():
     user_id = request.json.get('user_id')
-    pet_name = request.json.get('name', 'Joe')
 
     if not user_id:
         return jsonify({"error": "user_id is required"}), 400
 
-    pet = Pet(user_id, pet_name)
+    pet = Pet(user_id, name="Biscuit Bakes")
     pet.feed()
     pet.save_to_db()
     return jsonify({"message": f"You fed {pet.name}!", "status": pet.status()})
@@ -211,12 +188,11 @@ def feed_pet():
 @virtual_pet_bp.route('/play', methods=['POST'])
 def play_with_pet():
     user_id = request.json.get('user_id')
-    pet_name = request.json.get('name', 'Joe')
 
     if not user_id:
         return jsonify({"error": "user_id is required"}), 400
 
-    pet = Pet(user_id, pet_name)
+    pet = Pet(user_id, name="Biscuit Bakes")
     pet.play()
     pet.save_to_db()
     return jsonify({"message": f"You cooked with {pet.name}!", "status": pet.status()})
