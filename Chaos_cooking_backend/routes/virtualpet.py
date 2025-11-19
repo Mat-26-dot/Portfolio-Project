@@ -21,7 +21,7 @@ virtual_pet_bp = Blueprint('virtual_pet', __name__)
 
 # Main loop - continuously update pet's status, handle user input and display information
 class Pet:
-    def __init__(self, user_id, name="Joe"):
+    def __init__(self, user_id, name="Scraps"):
         self.user_id = user_id
         self.name = name
         self.hunger = 50
@@ -143,13 +143,13 @@ class Pet:
         else:
             return "crying"
 
-def get_or_create_pet(user_id, pet_name="Joe"):
+def get_or_create_pet(user_id, pet_name="Scraps"):
     if not user_id:
         raise ValueError("user_id is required")
     return Pet(user_id, pet_name)
 
 """class Game:
-    def __init__(self, user_id, pet_name="Joe"):
+    def __init__(self, user_id, pet_name="Scraps"):
         self.pet = Pet(user_id, pet_name)
         self.level = 1
 
@@ -168,7 +168,7 @@ def get_status():
     if not user_id:
         return jsonify({"error": "user_id is required"}), 400
 
-    pet = Pet(user_id, name="Biscuit Bakes")
+    pet = Pet(user_id, name="Scraps")
     return jsonify(pet.status())
 
 
@@ -179,7 +179,7 @@ def feed_pet():
     if not user_id:
         return jsonify({"error": "user_id is required"}), 400
 
-    pet = Pet(user_id, name="Biscuit Bakes")
+    pet = Pet(user_id, name="Scraps")
     pet.feed()
     pet.save_to_db()
     return jsonify({"message": f"You fed {pet.name}!", "status": pet.status()})
@@ -192,7 +192,7 @@ def play_with_pet():
     if not user_id:
         return jsonify({"error": "user_id is required"}), 400
 
-    pet = Pet(user_id, name="Biscuit Bakes")
+    pet = Pet(user_id, name="Scraps")
     pet.play()
     pet.save_to_db()
     return jsonify({"message": f"You cooked with {pet.name}!", "status": pet.status()})
